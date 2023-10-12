@@ -72,10 +72,10 @@ export default function SPGSAdminDashboard(){
                     <CardItem link={"/pg-admin/students"}  title={"Students"} icon={<BsMortarboard style={{
                         fontSize:30
                     }}/>}/>
-                    <CardItem  title={"Memo"} icon={<UserOutlined style={{
+                    <CardItem link={"/pg-admin/memos"}   title={"Memo"} icon={<UserOutlined style={{
                         fontSize:30
                     }}/>}/>
-                    <CardItem  title={"Settings"} icon={<FaCog style={{
+                    <CardItem link={"/pg-admin/document-type"}  title={"Settings"} icon={<FaCog style={{
                         fontSize:30
                     }}/>}/>
                 </Row>

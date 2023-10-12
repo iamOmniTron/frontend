@@ -1,8 +1,10 @@
 import { FaUser } from "react-icons/fa";
-import { Avatar, Breadcrumb,Button,Tag,Col,Descriptions,Row,Typography } from "antd";
+import { Avatar, Breadcrumb,Button,message,Col,Descriptions,Row,Typography, Upload,Image } from "antd";
 import { RxDashboard } from "react-icons/rx";
-import { UserOutlined } from "@ant-design/icons";
-import { userStore } from "../../store/userStore";
+import { UploadOutlined, UserOutlined } from "@ant-design/icons";
+import { userStore,getUserProfile } from "../../store/userStore";
+import { useUploadProfilePicture } from "../../hooks/coordinator";
+import { SERVER_URL,FALLBACK_IMAGE } from "../../utils/defaults";
 
 
 const {Title} = Typography;
@@ -11,7 +13,21 @@ const {Title} = Typography;
 
 export default function UserProfile(){
     const currentUser = userStore(state=>state.user);
-    console.log(currentUser)
+    // console.log(currentUser)
+
+    const setUser = userStore(state=>state.setUser)
+
+    const uploadImage = useUploadProfilePicture();
+
+
+    const handleFileUpload = async ({file})=>{
+        const formData = new FormData();
+        formData.append("image",file);
+        const response = await uploadImage(formData);
+        const {password,...userData} = await getUserProfile();
+        setUser(userData);
+        message.success(response);
+    }
 
     return(
         <>
@@ -56,8 +72,19 @@ export default function UserProfile(){
                     marginTop:"3em"
                 }}>
                         <Col style={{height:"100%"}} span={8}>
-                            <div style={{height:"100%",width:"100%"}}>
+                            <div style={{height:"100%",width:"100%",display:"flex",flexDirection:"column"}}>
+                                {
+                                    currentUser.imageUrl? <Image height={150}
+                                    width={150}
+                                    src={`${SERVER_URL.replace("/api","")}/${currentUser.imageUrl}`}
+                                    fallback={FALLBACK_IMAGE}/>:
                                 <Avatar shape="square" size={200} icon={<UserOutlined/>}/>
+                                }
+                                <Upload customRequest={handleFileUpload} showUploadList={false} style={{width:"100%"}}>
+                                    <Button type="primary" icon={<UploadOutlined/>} style={{backgroundColor:"#2bf12b",marginTop:"1em",width:"100%"}}>
+                                        Upload Picture
+                                    </Button>
+                                </Upload>
                             </div>
                         </Col>
                         <Col span={16}>

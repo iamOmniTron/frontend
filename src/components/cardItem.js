@@ -1,6 +1,7 @@
 import {Col,Row,Card,Typography} from "antd";
 import { Link } from "react-router-dom";
 import { BiSync } from "react-icons/bi";
+import {SyncOutlined} from "@ant-design/icons"
 const {Title} = Typography
 
 
@@ -34,7 +35,7 @@ export default function CardItem(props){
                                 <Col span={4} style={{
                                 height:"100%"
                             }}>
-                                <BiSync style={{color:"white"}}/>
+                                <SyncOutlined spin style={{color:"white",fontSize:20}}/>
                                 </Col>
                             </Row>
                             </Card>

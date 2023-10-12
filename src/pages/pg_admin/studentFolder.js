@@ -1,4 +1,4 @@
-import { Breadcrumb,Space,Typography,Button,Image} from "antd";
+import { Breadcrumb,Space,Typography,Button,Image, Tag} from "antd";
 import { RxDashboard } from "react-icons/rx";
 import {AiFillFolderOpen} from "react-icons/ai"
 import DataTable from "../../components/table";
@@ -63,17 +63,17 @@ const COLS = [
 
 function DocumentActions({document}){
     const [isViewOpen,setIsViewOpen] = useState(false);
+
     const navigate = useNavigate();
 
-
-    const navigateToComments = ()=>navigate("/coordinator/student-folder/comments",{state:document})
+    const navigateToComment = ()=>navigate("/pg-admin/student/document/comment",{state:document})
 
 
     return(
         <>
             <Space>
                 <Button onClick={()=>setIsViewOpen(true)} icon={<EyeOutlined/>} size="large" type="primary" style={{backgroundColor:"#2bf12b"}}/>
-                <Button onClick={navigateToComments} icon={<MessageOutlined/>} size="large" type="primary" style={{backgroundColor:"orange"}}/>
+                <Button onClick={navigateToComment} icon={<MessageOutlined/>} size="large" type="primary" style={{backgroundColor:"orange"}}/>
             </Space>
             <PopupModal title={"preview document"} open={isViewOpen} closeHandler={()=>setIsViewOpen(false)}>
                 <Image height={300}
@@ -88,8 +88,9 @@ function DocumentActions({document}){
 
 
 
-export default function StudentFolder(){
+export default function PgStudentFolder(){
         const {state:student} = useLocation();
+        console.log(student)
 
     return(
         <>

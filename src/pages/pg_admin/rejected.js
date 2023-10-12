@@ -1,8 +1,8 @@
-import { Breadcrumb,Button,Form,Input,Spin,Typography } from "antd"
+import { Breadcrumb,Button,Form,Input,Spin,Tag,Typography } from "antd"
 import { RxDashboard } from "react-icons/rx";
 // import {  } from "react-icons/bs";
 import DataTable from "../../components/table";
-import { FileSearchOutlined } from "@ant-design/icons";
+import { CheckOutlined, FileSearchOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import PopupModal from "../../components/modal";
 import { useApplications } from "../../hooks/application";
@@ -25,7 +25,7 @@ const BREADCRUMB_ITEMS = [
         title:(
             <>
                 <FileSearchOutlined/>
-                All Requests
+                Rejected Requests
             </>
         )
     }
@@ -42,37 +42,55 @@ const COLS = [
     {
         title:"Name",
         key:"name",
-        render:(_,{firstname,lastname})=>`${firstname} ${lastname}`
+        dataIndex:"User",
+        render:({firstname,middlename,lastname})=>`${firstname} ${middlename[0]} ${lastname}`
     },
     {
         title:"Matric Number",
         key:"matric",
-        dataIndex:"matricNumber"
+        dataIndex:"User",
+        render:(u)=>u.matricNumber
     },
     {
         title:"Gender",
         key:"gender",
-        dataIndex:"gender"
+        dataIndex:"User",
+        render:(u)=><Tag color="green">{u.gender[0].toUpperCase()}</Tag>
     },
     {
         title:"Date",
         key:"date",
-        dataIndex:"updatedAt"
+        dataIndex:"updatedAt",
+        render:(d)=>new Date(d).toLocaleDateString("en-US",{year:"2-digit",month:"short",day:"2-digit"})
     },
     {
         title:"Action",
-        key:"action"
+        key:"action",
+        render:(_,a)=><Actions application={a}/>
     }
 ]
+
+
+
+function Actions({application}){
+
+
+    return(
+        <>
+            <Button size="large" type="primary" icon={<CheckOutlined/>} style={{backgroundColor:"#2bf12b"}}/>
+        </>
+    )
+}
 
 
 export default function RejectedRequests(){
 
     const [isOpen,setIsOpen] = useState(false);
 
-    const {loading,application} = useApplications();
+    const {loading,applications} = useApplications();
+    // console.log(applications)
 
-    const filtered = application?.filter((a)=>a.statuse === "rejected")??[]
+    const filtered = applications?.filter((a)=>a.status === "rejected")??[]
     
     return(
         <>

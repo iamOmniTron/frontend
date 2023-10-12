@@ -1,11 +1,12 @@
-import { Breadcrumb,Card,Col,Row,Typography,Image, Descriptions, Tag, Avatar, Divider } from "antd"
+import { Breadcrumb,Card,Col,Row,Typography,Image, Descriptions, Tag, Avatar, Divider,message,Upload,Button } from "antd"
 import {RxDashboard} from "react-icons/rx";
-import { FALLBACK_IMAGE } from "../../utils/defaults";
-import {UserOutlined} from "@ant-design/icons";
+import { FALLBACK_IMAGE,SERVER_URL } from "../../utils/defaults";
+import {UserOutlined,UploadOutlined} from "@ant-design/icons";
 import DataTable from "../../components/table";
-import {userStore} from "../../store/userStore";
+import {userStore,getUserProfile} from "../../store/userStore";
 import { useStudentMemos } from "../../hooks/memo";
 import { useMyApplication } from "../../hooks/application";
+import { useUploadProfilePicture } from "../../hooks/user";
 
 
 
@@ -55,6 +56,20 @@ export default function UserDashboard(){
     const currentUser = userStore(state=>state.user);
     const {memos} = useStudentMemos();
     const {application} = useMyApplication();
+    const uploadImage = useUploadProfilePicture()
+
+    const setUser = userStore(state=>state.setUser);
+
+
+    const handleFileUpload = async ({file})=>{
+        const formData = new FormData();
+        formData.append("image",file);
+        const response = await uploadImage(formData);
+        const {password,...userData} = await getUserProfile();
+        setUser(userData);
+        message.success(response);
+    }
+
 
     return(
         <>
@@ -71,7 +86,20 @@ export default function UserDashboard(){
                             <Card>
                                 <Row>
                                 <Col span={12}>
-                                        <Avatar shape="square" icon={<UserOutlined/>} size={170}/>
+                                <div style={{height:"100%",width:"100%"}}>
+                                {
+                                    currentUser.imageUrl? <Image height={120}
+                                    width={150}
+                                    src={`${SERVER_URL.replace("/api","")}/${currentUser.imageUrl}`}
+                                    fallback={FALLBACK_IMAGE}/>:
+                                <Avatar shape="square" size={120} icon={<UserOutlined/>}/>
+                                }
+                                <Upload customRequest={handleFileUpload} showUploadList={false} style={{width:"100%"}}>
+                                    <Button type="primary" icon={<UploadOutlined/>} style={{backgroundColor:"#2bf12b",marginTop:"1em",width:"100%"}}>
+                                        Upload Picture
+                                    </Button>
+                                </Upload>
+                            </div>
                                 </Col>
                             </Row>
                             </Card>
@@ -94,9 +122,6 @@ export default function UserDashboard(){
                             <Descriptions.Item label="Gender">
                                     <Tag color="green">{currentUser.gender[0].toUpperCase()}</Tag>
                             </Descriptions.Item>
-                            {/* <Descriptions.Item label="Matric Number">
-                                    09902992982
-                            </Descriptions.Item> */}
                         </Descriptions>
                     </Card>
                 </Col>
@@ -120,7 +145,7 @@ export default function UserDashboard(){
                             <Title level={4}>
                                 DEPARTMENTAL MEMOS
                             </Title>
-                            <DataTable data={memos} cols={MEMO_COLS}/>
+                            <DataTable data={[{...memos[0]}]} cols={MEMO_COLS}/>
                         </Col>
                     </Row>
                 </Card>

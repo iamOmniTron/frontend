@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { destroy, mutate, query, update } from "../utils/fetch"
+import { destroy, mutate, query, update,upload } from "../utils/fetch"
 
 
 
@@ -53,4 +53,14 @@ export const useDeleteCoordinator = ()=>{
         return response;
     }
     return deleteCoordinator
+}
+
+
+export const useUploadProfilePicture = ()=>{
+    const uploadImage = async (payload)=>{
+        const url = `coordinator/image`;
+        const {message}= await upload(url,true,payload);
+        return message;
+    };
+    return uploadImage;
 }

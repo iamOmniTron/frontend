@@ -12,6 +12,8 @@ import DocumentTypes from "../pages/pg_admin/docmentType";
 import AllRequests from "../pages/pg_admin/requests";
 import RejectedRequests from "../pages/pg_admin/rejected";
 import { userStore } from "../store/userStore";
+import PgStudentFolder from "../pages/pg_admin/studentFolder";
+import Comments from "../pages/pg_admin/comments";
 
 
 
@@ -33,7 +35,9 @@ export default function PGAdminRoutes(){
                     <Route path="document-type" element={<DocumentTypes/>}/>
                     <Route path="requests" element={<AllRequests/>}/>
                     <Route path="requests/rejected" element={<RejectedRequests/>}/>
+                    <Route path="student/folder" element={<PgStudentFolder/>}/>
                     <Route path="*" element={<Navigate to="/login/pg-admin"/>}/>
+                    <Route path="student/document/comment" element={<Comments/>}/>
                 </Route>
                     <Route path="*" element={<Navigate to="/login/pg-admin"/>}/>
             </Routes>

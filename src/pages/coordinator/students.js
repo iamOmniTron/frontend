@@ -1,4 +1,4 @@
-import { Breadcrumb,Typography,Spin, Button, Modal, Form, Input, Select, message, Space } from "antd"
+import { Breadcrumb,Typography,Spin, Button, Modal, Form, Input, Select, message, Space, Avatar } from "antd"
 import { BsMortarboard } from "react-icons/bs";
 import { RxDashboard } from "react-icons/rx"
 import DataTable from "../../components/table";
@@ -7,6 +7,7 @@ import PopupModal from "../../components/modal";
 import {useContext, useRef, useState} from "react"
 import { useCreateUser, useDeleteUser, useDepartmentalUsers, useUpdateUser, useUsers } from "../../hooks/user";
 import RefreshContext from "../../context/refreshContext";
+import { SERVER_URL } from "../../utils/defaults";
 import { extractValueFromInputRef } from "../../utils/helpers";
 
 
@@ -43,6 +44,12 @@ const STUDENTS_COLS = [
         title:"S/N",
         key:"s/n",
         render:(_,__,idx)=>idx+1
+    },
+    {
+        title:"Thumbnail",
+        key:"thumbnail",
+        dataIndex:"imageUrl",
+        render:(i)=><Avatar src={`${SERVER_URL.replace("/api","")}/${i}`}/>
     },
     {
         title:"Name",

@@ -5,9 +5,10 @@ import {RxDashboard} from "react-icons/rx";
 import DataTable from "../../components/table";
 import PopupModal from "../../components/modal";
 import { useContext, useRef, useState } from "react";
-import { useCreateMemo, useMemos } from "../../hooks/memo";
+import { useCreateMemo, useMemos, useUpdateMemo } from "../../hooks/memo";
 import { extractValueFromInputRef } from "../../utils/helpers";
 import RefreshContext from "../../context/refreshContext";
+import { useUpdateComment } from "../../hooks/comment";
 
 
 const {Title} = Typography;
@@ -69,24 +70,51 @@ const MEMO_COLS = [
 function MemoEdit({memo}){
     const [isOpen,setIsOpen] = useState(false);
 
+    const {flag,setFlag} = useContext(RefreshContext)
+    const updateMemo = useUpdateMemo()
+
+    const titleRef = useRef(null);
+    const subjectRef = useRef(null);
+    const contentRef = useRef(null);
+
+    const handleSubmit = async ()=>{
+        const payload = {
+            title:extractValueFromInputRef(titleRef),
+            subject:extractValueFromInputRef(subjectRef),
+            text:contentRef.current.resizableTextArea.textArea.value
+        };
+        await updateMemo(memo.id,payload);
+        message.success("Memo updated successfully");
+        setFlag(!flag);
+        setIsOpen(false);
+    }
+
+
+
     return (
         <>
             <Space>
-                <Button size="large" onClick={()=>setIsOpen(true)} style={{backgroundColor:"#2bf12b"}} icon={<EyeOutlined/>}/>
+                <Button type="primary" size="large" onClick={()=>setIsOpen(true)} style={{backgroundColor:"#2bf12b"}} icon={<EyeOutlined/>}/>
             </Space>
             <PopupModal width={700} title={"Preview Memo"} open={isOpen} closeHandler={()=>setIsOpen(false)}>
-                <Descriptions column={2}>
-                    <Descriptions.Item label={"Memo Title"}>
-                        {memo.title}
-                    </Descriptions.Item>
-                    <Descriptions.Item label={"Memo Subject"}>
-                        {memo.subject}
-                    </Descriptions.Item>
-                </Descriptions>
-                <span style={{fontWeight:"bold"}}>Memo Content</span>
-                <Card>
-                    <i>{memo.text}</i>
-                </Card>
+            <Form initialValues={{...memo}}>
+                <Form.Item name="title">
+                    <Input ref={titleRef} placeholder="Title"/>
+                </Form.Item>
+                <Form.Item name={"subject"}>
+                    <Input ref={subjectRef} placeholder="Subject"/>
+                </Form.Item>
+                <Form.Item name="text">
+                    <Input.TextArea ref={contentRef} rows={10} placeholder="enter memo content"/>
+                </Form.Item>
+                <Form.Item>
+                    <Button onClick={handleSubmit} block style={{
+                        backgroundColor:"#2bf12b",
+                    }} type={"primary"}>
+                        SUBMIT
+                    </Button>
+                </Form.Item>
+            </Form>
             </PopupModal>
         </>
     )

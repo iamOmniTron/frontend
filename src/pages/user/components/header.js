@@ -27,6 +27,11 @@ const MENU_ITEMS = [
         label:<Link to={"/user/profile"}><b>Profile</b></Link>,
         icon:null
     },
+    {
+        key:"comments",
+        label:<Link to={"/user/comments"}><b>Comments</b></Link>,
+        icon:null
+    },
 ]
 
 

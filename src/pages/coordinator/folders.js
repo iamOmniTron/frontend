@@ -73,7 +73,7 @@ function PreviewFolder({folder}){
     return(
         <>
             <Space>
-                <Button onClick={navigateToFolder} style={{backgroundColor:"#2bf12b"}} size="large" icon={<EyeOutlined/>}/>
+                <Button type="primary" onClick={navigateToFolder} style={{backgroundColor:"#2bf12b"}} size="large" icon={<EyeOutlined/>}/>
             </Space>
         </>
     )

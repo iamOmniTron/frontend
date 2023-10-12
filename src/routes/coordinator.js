@@ -10,6 +10,7 @@ import Memo from "../pages/coordinator/memo";
 import UserProfile from "../pages/coordinator/profile";
 import UserDocuments from "../pages/coordinator/documents";
 import StudentFolder from "../pages/coordinator/studentFolder";
+import CoordinatorComments from "../pages/coordinator/comments";
 
 
 
@@ -31,6 +32,7 @@ export default function CoodinatorRoutes(){
                     <Route path="*" element={<Navigate to="/login/coordinator"/>}/>
                     <Route path="students/documents" element={<UserDocuments/>}/>
                     <Route path="student-folder/preview" element={<StudentFolder/>}/>
+                    <Route path="student-folder/comments" element={<CoordinatorComments/>}/>
                 </Route>
                     <Route path="*" element={<Navigate to="/login/coordinator"/>}/>
             </Routes>

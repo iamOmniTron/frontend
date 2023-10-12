@@ -1,9 +1,10 @@
 import { FaUser } from "react-icons/fa";
-import { Avatar, Breadcrumb,Button,Tag,Col,Descriptions,Row,Typography } from "antd";
+import { Avatar, Breadcrumb,Button,Tag,Col,Descriptions,Row,Typography,Image } from "antd";
 import { RxDashboard } from "react-icons/rx";
 import { UserOutlined } from "@ant-design/icons";
 import { userStore } from "../../store/userStore";
 import { useMyApplication } from "../../hooks/application";
+import { SERVER_URL,FALLBACK_IMAGE } from "../../utils/defaults";
 
 
 const {Title} = Typography;
@@ -59,7 +60,13 @@ export default function UserProfile(){
                 }}>
                         <Col style={{height:"100%"}} span={8}>
                             <div style={{height:"100%",width:"100%"}}>
-                                <Avatar shape="square" size={200} icon={<UserOutlined/>}/>
+                            {
+                                    currentUser.imageUrl? <Image height={200}
+                                    width={250}
+                                    src={`${SERVER_URL.replace("/api","")}/${currentUser.imageUrl}`}
+                                    fallback={FALLBACK_IMAGE}/>:
+                                <Avatar shape="square" size={120} icon={<UserOutlined/>}/>
+                                }
                             </div>
                         </Col>
                         <Col span={16}>

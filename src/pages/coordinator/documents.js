@@ -114,15 +114,20 @@ export default function UserDocuments(){
     const {documentTypes} = useDocumentTypes();
 
     const handleSubmit = async ()=>{
+        if(!file.type.includes("image/")){
+            message.error("Document should be image for security reasons");
+            return;
+        }
         const formData = new FormData();
         formData.append("file",file);
         formData.append("typeId",type);
         formData.append("userId",student);
 
-        await uploadDocument(formData);
+        const response = await uploadDocument(formData);
+        console.log(response);
+        setFlag(!flag)
         setIsOpen(false);
         message.success("Document uploaded successfully");
-        setFlag(!flag)
     }
 
     return(
